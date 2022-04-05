@@ -29,11 +29,13 @@
           <textarea placeholder="Description" id="eventDescription" name="description" v-model="description">
           </textarea>
         </div>
-        <div>
+        <div class="categoriesContainer">
           <p>Catégories</p>
-          <div v-for="item in categories" :id="item.id" @click="this.setCategory(item.id)">
-            <img :src="item.logo" :alt="'Bouton '+ item.name ">
-            {{ item.name }}
+          <div>
+            <div v-for="item in categories" :id="item.id" @click="this.setCategory(item.id)">
+              <img :src="item.logo" :alt="'Bouton '+ item.name ">
+              {{ item.name }}
+            </div>
           </div>
         </div>
         <input type="submit" value="AJOUTER">
@@ -124,10 +126,11 @@ export default {
 * {
   font-family: 'Open Sans', sans-serif;
 }
-.container{
+
+.container {
   max-width: 900px;
   height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
   position: relative;
   background-color: #FAFAFA;
   margin: 0 auto;
@@ -182,7 +185,7 @@ export default {
   color: #9798A6;
 }
 
-.form-container div {
+.form-container > div {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -231,6 +234,19 @@ input[type="submit"] {
 textarea {
   min-width: 100%;
   max-width: 100%;
+}
+
+.categoriesContainer.categoriesContainer {
+  flex-direction: column;
+  align-items: start;
+}
+
+.categoriesContainer > div{
+  display: flex;
+  gap: 2rem;
+  padding: 10px;
+  width: 90vw;
+  overflow-x: scroll;
 }
 
 </style>
