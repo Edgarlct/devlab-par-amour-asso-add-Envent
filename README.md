@@ -27,3 +27,9 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### To access put your jwt in url
+
+```sh
+?jwt=***********
+```
