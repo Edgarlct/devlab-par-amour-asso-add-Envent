@@ -2,7 +2,7 @@
   <div class="container">
     <form @submit.prevent="addEvent" id="form" v-if="access">
       <div id="bgImage">
-        <input type="file" name="image" id="eventImage">
+        <input type="file" name="image" id="eventImage" accept="image/*">
         <label for="eventImage">Ajouter une image</label>
       </div>
       <div class="form-container">
@@ -31,8 +31,8 @@
         </div>
         <div>
           <p>Catégories</p>
-          <div v-for="item in categories" :id="item.id" @click="this.setCategory(item.id)"><img :src="item.logo"
-                                                                                                :alt="'Bouton '+ item.name ">
+          <div v-for="item in categories" :id="item.id" @click="this.setCategory(item.id)">
+            <img :src="item.logo" :alt="'Bouton '+ item.name ">
             {{ item.name }}
           </div>
         </div>
@@ -67,6 +67,7 @@ export default {
       this.jwt = this.$route.query.jwt
       this.access = true
       axios.get('http://192.46.237.170:1337/categories').then(r => {
+        console.log("ok")
         this.categories = r.data
       })
     } else {
