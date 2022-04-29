@@ -2,7 +2,7 @@
   <div class="container">
     <form @submit.prevent="addEvent" id="form" v-if="access">
       <div id="bgImage">
-        <input type="file" name="image" id="eventImage" accept="image/*">
+        <input type="file" name="file" id="eventImage" accept="image/*">
         <label for="eventImage">Ajouter une image</label>
       </div>
       <div class="form-container">
@@ -14,6 +14,10 @@
         <div>
           <img src="../assets/location.png" alt="location icon">
           <input type="text" placeholder="Adresse" name="place" id="eventPlace" v-model="place">
+        </div>
+        <div>
+          <img src="../assets/location.png" alt="location icon">
+          <input type="text" placeholder="Nom du lieu" name="place" id="eventPlaceName" v-model="placeName">
         </div>
         <div>
           <img src="../assets/cash.png" alt="cash icon">
@@ -28,15 +32,6 @@
           <label for="eventDescription">A propos</label>
           <textarea placeholder="Description" id="eventDescription" name="description" v-model="description">
           </textarea>
-        </div>
-        <div class="categoriesContainer">
-          <p>Catégories</p>
-          <div>
-            <div v-for="item in categories" :id="item.id" @click="this.setCategory(item.id)">
-              <img :src="item.logo" :alt="'Bouton '+ item.name ">
-              {{ item.name }}
-            </div>
-          </div>
         </div>
         <input type="submit" value="AJOUTER">
       </div>
@@ -59,6 +54,7 @@ export default {
       price: 0,
       person: 0,
       place: "",
+      placeName: "",
       date: "",
       categoryId: 0,
     }
@@ -68,10 +64,6 @@ export default {
     if (typeof this.$route.query.jwt !== "undefined") {
       this.jwt = this.$route.query.jwt
       this.access = true
-      axios.get('http://192.46.237.170:1337/categories').then(r => {
-        console.log("ok")
-        this.categories = r.data
-      })
     } else {
       alert('Vous n\'êtes pas connecté')
     }
@@ -83,41 +75,24 @@ export default {
       const img = document.getElementById('eventImage').files;
       const formData = new FormData();
 
-      formData.append('files', img[0])
-      if (this.name !== "" && this.description !== "" && this.date !== "" && this.categoryId !== 0 && this.place !== "") {
-        axios.post("http://192.46.237.170:1337/upload", formData, {
-          headers: {
-            Authorization: 'Bearer ' + this.jwt,
-          }
-        }).then(r => {
-          console.log(r)
-          axios.post('http://192.46.237.170:1337/events', {
-            "name": this.name,
-            "description": this.description,
-            "Date_and_time": this.date,
-            "price": this.price,
-            "place": this.place,
-            "ImageLink": r.data[0].url,
-            "categories": [
-              {
-                "id": this.categoryId
-              }
-            ]
-
-          }, {
+      formData.append('file', img[0])
+      formData.append('name', this.name)
+      formData.append('description', this.description)
+      formData.append('date', this.date)
+      formData.append('price', this.price)
+      formData.append('place', this.person)
+      formData.append('adresse', this.place)
+      formData.append('namePlace', this.placeName)
+      if (this.name !== "" && this.description !== "" && this.date !== "" && this.place !== "") {
+          axios.post('https://127.0.0.1:8000/api/events', formData, {
             headers: {
               Authorization: 'Bearer ' + this.jwt,
             }
           })
-        })
       } else {
         alert('Vous devez remplir tout les champs')
       }
     },
-
-    setCategory(id) {
-      this.categoryId = id
-    }
   }
 }
 </script>
